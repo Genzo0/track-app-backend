@@ -55,7 +55,10 @@ const terimaResi = async (req, res) => {
     if (!resi) {
       return res.status(404).json({ message: "Resi tidak ditemukan" });
     }
-    await Resi.updateOne({ noResi }, { isAccepted });
+    const newResi = await Resi.findOneAndUpdate({ noResi }, { isAccepted });
+    if (newResi) {
+      res.status(200).json({ message: "Resi berhasil diterima" });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
