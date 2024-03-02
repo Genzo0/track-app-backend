@@ -15,6 +15,9 @@ const getResiByNoResi = async (req, res) => {
     if (!resi) {
       return res.status(404).json({ message: "Resi tidak ditemukan" });
     }
+    if (resi.isAccepted) {
+      return res.status(400).json({ message: "Resi sudah diterima" });
+    }
     res.json(resi);
   } catch (error) {
     res.status(500).json({ message: error.message });
