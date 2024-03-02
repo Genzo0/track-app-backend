@@ -29,6 +29,13 @@ const createNewResi = async (req, res) => {
     return res.status(400).json({ message: "Isi semua field" });
   }
 
+  const resi = await Resi.findOne({ noResi });
+  if (resi) {
+    return res
+      .status(400)
+      .json({ message: "Telah terdapat nomor resi yang sama" });
+  }
+
   const resiObject = {
     noResi,
     name,
@@ -37,9 +44,9 @@ const createNewResi = async (req, res) => {
     photo: `/assets/${photo}`,
   };
 
-  const resi = Resi.create(resiObject);
+  const newResi = Resi.create(resiObject);
 
-  if (resi) {
+  if (newResi) {
     res.status(201).json({ message: "Resi berhasil ditambahkan" });
   } else {
     res.status(400).json({ message: "Gagal menambahkan resi" });
@@ -54,6 +61,9 @@ const terimaResi = async (req, res) => {
     const resi = await Resi.findOne({ noResi });
     if (!resi) {
       return res.status(404).json({ message: "Resi tidak ditemukan" });
+    }
+    if (resi.isAccepted) {
+      return res.status(400).json({ message: "Resi sudah diterima" });
     }
     const newResi = await Resi.findOneAndUpdate({ noResi }, { isAccepted });
     if (newResi) {
