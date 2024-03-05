@@ -23,10 +23,14 @@ const getResiByNoResi = async (req, res) => {
 
 const createNewResi = async (req, res) => {
   const { noResi, name, telp, vendor } = req.body;
-  const photo = req.file.filename;
+  const photo = req.file;
 
   if (!noResi || !name || !telp || !vendor || !photo) {
     return res.status(400).json({ message: "Isi semua field" });
+  }
+
+  if (photo.size > 10 * 1024 * 1024) {
+    return res.status(400).json({ message: "Ukuran maksimal gambar 10MB" });
   }
 
   const resi = await Resi.findOne({ noResi });
@@ -41,7 +45,7 @@ const createNewResi = async (req, res) => {
     name,
     telp,
     vendor,
-    photo: `/assets/${photo}`,
+    photo: `/assets/${photo.filename}`,
   };
 
   const newResi = Resi.create(resiObject);
