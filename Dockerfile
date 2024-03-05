@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:14
+FROM node:18
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose a port (if needed)
-EXPOSE 3000
+EXPOSE 5000
 
 # Start the application
 CMD ["npm", "run", "dev"]
